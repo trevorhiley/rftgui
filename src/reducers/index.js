@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
 import signups from './signupReducer';
+import authors from './authorReducer';
 
 const rootReducer = combineReducers({
-  signups
+  signups,
+  authors
 });
 
 export default rootReducer;

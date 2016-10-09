@@ -18,6 +18,12 @@ class ManageSignupPage  extends React.Component {
 
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.signup.id != nextProps.signup.id) {
+      this.setState({signup: Object.assign({}, nextProps.signup)});
+    }
+  }
+
   updateSignupState(event) {
     const field = event.target.name;
     let signup = this.state.signup;
@@ -25,9 +31,16 @@ class ManageSignupPage  extends React.Component {
     return this.setState({signup: signup});
   }
 
+  redirect () {
+    this.context.router.push('/signups');
+  }
+
   saveSignup(event) {
     event.preventDefault();
-    this.props.actions.saveSignup(this.state.signup);
+    this.props.actions.saveSignup(this.state.signup).then(() => {
+      this.redirect();
+    });
+
   }
 
   render() {
@@ -48,6 +61,16 @@ ManageSignupPage.propTypes = {
   actions: PropTypes.object.isRequired
 };
 
+ManageSignupPage.contextTypes = {
+  router: PropTypes.object
+};
+
+function getSignupFromState (signups, signupId) {
+  const signup = signups.filter( signup => signup.id === signupId );
+  if (signup.length === 1) return signup[0];
+  return null;
+}
+
 function mapDispatchToProps(dispatch) {
   return ({
     actions: bindActionCreators(signupActions, dispatch)
@@ -55,7 +78,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state, ownProps) {
+  const signupId = ownProps.params.id;
   let signup = {id: '', watchHref: '', title: '', authorId: '', length: '', category: ''};
+
+  if (signupId && state.signups.length > 0) {
+    signup = getSignupFromState(state.signups, signupId);
+  }
 
   const authorsFormattedForDropdown = state.authors.map(author => {
     return {

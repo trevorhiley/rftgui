@@ -1,4 +1,5 @@
 export default {
   authors: [],
-  signups: []
-}
+  signups: [],
+  ajaxStates: 0
+};

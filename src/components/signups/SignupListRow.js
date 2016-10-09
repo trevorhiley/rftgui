@@ -6,6 +6,7 @@ const SignupListRow = ({signup}) => {
     <tr>
       <td><a href={signup.watchHref} target="_blank">Watch</a></td>
       <td><Link to={'/signup/' + signup.id}>{signup.title}</Link></td>
+      <td>{signup.authorId}</td>
       <td>{signup.category}</td>
       <td>{signup.length}</td>
     </tr>

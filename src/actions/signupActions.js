@@ -1,4 +1,5 @@
 import * as types from './actionTypes';
+import {ajaxLoading} from './ajaxActions';
 import signupApi from '../api/mockCourseApi';
 
 export function loadSignupsSuccess (signups) {
@@ -8,6 +9,7 @@ export function loadSignupsSuccess (signups) {
 
 export function loadSignups() {
   return function(dispatch) {
+    dispatch(ajaxLoading());
     return signupApi.getAllCourses().then(signups=> {
       dispatch(loadSignupsSuccess(signups));
     }).catch(error => {
@@ -17,15 +19,16 @@ export function loadSignups() {
 }
 
 export function updateSignupSuccess(signup) {
-  return { type: types.UPDATE_SIGNUP_SUCCESS, signup}
+  return { type: types.UPDATE_SIGNUP_SUCCESS, signup};
 }
 
 export function createSignupSuccess(signup) {
-  return { type: types.CREATE_SIGNUP_SUCCESS, signup}
+  return { type: types.CREATE_SIGNUP_SUCCESS, signup};
 }
 
 export function saveSignup(signup) {
   return function(dispatch, getState) {
+    dispatch(ajaxLoading());
     return signupApi.saveCourse(signup).then(savedSignup => {
       signup.id ? dispatch(updateSignupSuccess(savedSignup)) :
       dispatch(createSignupSuccess(savedSignup));

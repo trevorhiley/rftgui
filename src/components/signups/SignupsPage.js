@@ -3,11 +3,17 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import SignupList from './SignupList';
 import * as signupActions from '../../actions/signupActions';
+import {browserHistory} from 'react-router';
 
 class SignupsPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.redirectToAddSignupPage = this.redirectToAddSignupPage.bind(this);
+  }
+
+  redirectToAddSignupPage() {
+    browserHistory.push('signup');
   }
 
   render() {
@@ -15,6 +21,10 @@ class SignupsPage extends React.Component {
     return (
       <div>
         <h1>Signups</h1>
+        <input type="submit"
+          value="Add Signup"
+          className="btn btn-primary"
+          onClick={this.redirectToAddSignupPage}/>
         <SignupList signups={signups}/>
       </div>
     );

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as signupActions from '../../actions/authorActions';
+import * as signupActions from '../../actions/signupActions';
 import SignupForm from './SignupForm';
 
 class ManageSignupPage  extends React.Component {
@@ -13,6 +13,21 @@ class ManageSignupPage  extends React.Component {
       errors: {}
     };
 
+    this.updateSignupState = this.updateSignupState.bind(this);
+    this.saveSignup = this.saveSignup.bind(this);
+
+  }
+
+  updateSignupState(event) {
+    const field = event.target.name;
+    let signup = this.state.signup;
+    signup[field] = event.target.value;
+    return this.setState({signup: signup});
+  }
+
+  saveSignup(event) {
+    event.preventDefault();
+    this.props.actions.saveSignup(this.state.signup);
   }
 
   render() {
@@ -20,14 +35,17 @@ class ManageSignupPage  extends React.Component {
       <SignupForm
         errors={this.state.errors}
         signup={this.state.signup}
-        allAuthors={this.props.authors}/>
+        allAuthors={this.props.authors}
+        onChange={this.updateSignupState}
+        onSave={this.saveSignup}/>
     );
   }
 }
 
 ManageSignupPage.propTypes = {
   signup: PropTypes.object.isRequired,
-  authors: PropTypes.array.isRequired
+  authors: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 function mapDispatchToProps(dispatch) {

@@ -15,3 +15,22 @@ export function loadSignups() {
     });
   };
 }
+
+export function updateSignupSuccess(signup) {
+  return { type: types.UPDATE_SIGNUP_SUCCESS, signup}
+}
+
+export function createSignupSuccess(signup) {
+  return { type: types.CREATE_SIGNUP_SUCCESS, signup}
+}
+
+export function saveSignup(signup) {
+  return function(dispatch, getState) {
+    return signupApi.saveCourse(signup).then(savedSignup => {
+      signup.id ? dispatch(updateSignupSuccess(savedSignup)) :
+      dispatch(createSignupSuccess(savedSignup));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
